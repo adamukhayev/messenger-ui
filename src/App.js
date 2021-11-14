@@ -166,6 +166,7 @@ class App extends Component {
         }
       })
     }  if (!flags) {
+      console.log("FLAG ")
       allListCar = <div style={{border: '4px double blue',
         background: 'cyan',
         paddingTop: '10px',
@@ -181,11 +182,9 @@ class App extends Component {
     const inputStyle = ['style','input']
 
     if (this.state.title !== '') {
-      console.log(inputStyle.join(' '))
       inputStyle.push('blue')
     } else {
       inputStyle.push('red')
-      console.log('AAAAAAA ',inputStyle.join('.'))
     }
     return (
         <div style={styleDiv}>
