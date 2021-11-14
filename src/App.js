@@ -166,6 +166,7 @@ class App extends Component {
         }
       })
     }  if (!flags) {
+      console.log("FLAG ")
       allListCar = <div style={{border: '4px double blue',
         background: 'cyan',
         paddingTop: '10px',
