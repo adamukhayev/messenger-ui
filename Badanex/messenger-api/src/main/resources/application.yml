@@ -1,0 +1,27 @@
+spring:
+  flyway:
+    enabled: true
+  application:
+    name: Messenger
+  datasource:
+    url: "jdbc:postgresql://localhost:5434/messenger_db?currentSchema=main"
+    username: "test"
+    password: "123"
+    driver-class-name: org.postgresql.Driver
+feign:
+  client:
+    config:
+      users-api:
+        connectTimeout: 65000
+        readTimeout: 65000
+      default:
+        connectTimeout: 30000
+        readTimeout: 30000
+        loggerLevel: FULL
+  url:
+    user-api: 'http://localhost:8081/api/v1/user'
+    answer-api: 'http://localhost:8082/admin/answer'
+#    media-api: ''
+#    messenger-api: ''
+server:
+  port: 8083
