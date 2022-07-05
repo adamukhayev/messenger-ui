@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import ConversationSearch from '.././conversationSearch/ConversationSearch';
-import ConversationListItem
-  from '.././conversationListItem/ConversationListItem';
-import Toolbar from '.././toolbar/Toolbar';
+import ConversationSearch from '../conversationSearch/ConversationSearch';
+import ConversationListItem from '../conversationListItem/ConversationListItem';
+import Toolbar from '../toolbar/Toolbar';
 import axios from 'axios';
 import {Icon} from '@iconify/react';
 import settingsOutline from '@iconify/icons-ion/settings-outline';
