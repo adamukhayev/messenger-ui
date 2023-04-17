@@ -1,5 +1,5 @@
 import './App.css';
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import {Link, Route, Switch} from "react-router-dom";
 import LoginAuth from './component/LoginAuth'
 import Messenger from "./component/messanger/Messenger";

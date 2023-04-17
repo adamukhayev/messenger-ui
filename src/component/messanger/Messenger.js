@@ -1,108 +1,72 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Messenger.css';
-import {StompSessionProvider, useSubscription,} from "react-stomp-hooks";
+import SockJS from 'sockjs-client'
+import {Stomp} from '@stomp/stompjs'
 import {useSelector} from "react-redux";
-// import SockJsClient from 'sockjs-client'
 
-// const  ws = new WebSocket('ws://localhost:8083/app/hello')
+let stompClient = null
 
+let text = '';
 export default function Messenger(props) {
+  const username = useSelector(state => state.authReducer.username);
+  const [mess, setMessages] = useState([])
+  const [text, setText] = useState('')
+  const handlers = []
 
-  const token = useSelector(state => state.authReducer.token);
-  const login = useSelector(state => state.authReducer.username)
+  useEffect(() => {
+    let socket = new SockJS("http://localhost:8082/chat")
+    stompClient = Stomp.over(socket)
+    console.log(' CONNECT ', stompClient.connected)
+    stompClient.connect({}, frame => {
+      stompClient.subscribe('/topic', message => {
+        console.log("frame : ", message.body)
+        let newMessage = JSON.parse(message.body)
+        setMessages((preyMessage) => [...preyMessage, newMessage])
+      })
+    })
+  }, [])
 
-  const jwtToken = {
-    "username": login
-  };
+  const messageOnchange = (e) => {
+    setText(e.target.value)
+  }
 
-  function SubscribingComponent() {
-    const [lastMessage, setLastMessage] = useState("No message received yet");
-
-    console.log("AA ", jwtToken)
-    //Subscribe to /topic/test, and use handler for all received messages
-    //Note that all subscriptions made through the library are automatically removed when their owning component gets unmounted.
-    //If the STOMP connection itself is lost they are however restored on reconnect.
-    //You can also supply an array as the first parameter, which will subscribe to all destinations in the array
-    useSubscription("/topic/messages",
-        (message) => setLastMessage(message.body));
-
-    return (
-        <div>Last Message: {lastMessage}</div>
-    );
+  const sendMessage = () => {
+    if (text !== '') {
+      stompClient.send("/chat", {}, JSON.stringify({
+        author: username,
+        text: text,
+        url: 'https://placehold.jp/3d4070/ffffff/50x50.png'
+      }))
+      setText('');
+    }
+    setText('');
   }
 
   return (
       <div>
-        <StompSessionProvider
-            url={"http://localhost:8083/chat?access_token=" + token}
-            // headers={ jwtToken }
-            //All options supported by @stomp/stompjs can be used here
-        >
-          <SubscribingComponent/>
-        </StompSessionProvider>
-        {/*<div>*/}
-        {/*  <input type="text" id="from" placeholder="Choose a nickname"/>*/}
-        {/*</div>*/}
-        {/*<br/>*/}
-        {/*<div>*/}
-        {/*  <button id="connect" onClick={connect}>Connect</button>*/}
-        {/*  /!*<button id="disconnect" disabled="disabled" onClick={disconnect}>*!/*/}
-        {/*  /!*  Disconnect*!/*/}
-        {/*  /!*</button>*!/*/}
-        {/*</div>*/}
-        {/*<br/>*/}
-        {/*<input type="text" id="text" placeholder="Write a message..."/>*/}
-        {/*<button id="sendMessage" onClick={sendMessage}>Send</button>*/}
-        {/*<p id="response"></p>*/}
-        {/*<textarea onChange={(e) => setMesseg(e.currentTarget.value)} value={messeg}></textarea>*/}
-        {/*<button onClick={#}>Send</button>*/}
-        {/*<button onClick={handleClickChangeSocketUrl}>*/}
-        {/*  Click Me to change Socket Url*/}
-        {/*</button>*/}
-        {/*<button*/}
-        {/*    onClick={handleClickSendMessage}*/}
-        {/*    disabled={readyState !== ReadyState.OPEN}*/}
-        {/*>*/}
-        {/*  Click Me to send 'Hello'*/}
-        {/*</button>*/}
-        {/*<span>The WebSocket is currently {#}</span>*/}
-        {/*{lastMessage ? <span>Last message: {lastMessage.data}</span> : null}*/}
-        {/*<ul>*/}
-        {/*  {messageHistory.map((message, idx) => (*/}
-        {/*      <span key={idx}>{message ? message.data : null}</span>*/}
-        {/*  ))}*/}
-        {/*</ul>*/}
+        <div>
+          <div>
+            <div>
+              <div style={{height: "400px", overflowY: "auto"}}>
+                {mess.map(m => <div>
+                  <img src={m.url}/>
+                  <ul>{m.author}</ul>
+                  <br/>
+                  {m.text}
+                  <hr/>
+                </div>)}
+              </div>
+              <div>
+                <div>
+                  <textarea value={text} onChange={messageOnchange}></textarea>
+                </div>
+                <div>
+                  <button onClick={sendMessage}>Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
   );
-
-  // return (
-  //     <div className='messenger'>
-  //        <Toolbar
-  //         title="Messenger"
-  //         leftItems={[
-  //           <ToolbarButton key="cog" icon="ion-ios-cog" />
-  //         ]}
-  //         rightItems={[
-  //           <ToolbarButton key="add" icon="ion-ios-add-circle-outline" />
-  //         ]}
-  //       />
-  //
-  //        <Toolbar
-  //         title="Conversation Title"
-  //         rightItems={[
-  //           <ToolbarButton key="info" icon="ion-ios-information-circle-outline" />,
-  //           <ToolbarButton key="video" icon="ion-ios-videocam" />,
-  //           <ToolbarButton key="phone" icon="ion-ios-call" />
-  //         ]}
-  //       />
-  //
-  //       <div className="scrollable sidebar">
-  //         <ConversationList />
-  //       </div>
-  //
-  //       <div className='scrollable content'>
-  //         <MessageList />
-  //       </div>
-  //     </div>
-  // );
 }

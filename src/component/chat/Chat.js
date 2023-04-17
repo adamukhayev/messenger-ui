@@ -11,7 +11,7 @@ import {
 import moment from 'moment';
 import {useState} from 'react';
 import classes from './Chat.module.css'
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import {Footer} from "antd/es/layout/layout";
 
 const {Content} = Layout;

@@ -43,17 +43,18 @@ import {Icon} from '@iconify/react';
 
 export const Header = (props) => {
   const dispatch = useDispatch();
-  const email = useSelector(state => state.authReducer.email);
+  console.log('AAA ', useSelector(state => state.authReducer))
+  const username = useSelector(state => state.authReducer.username);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
   useEffect(() => {
-    if (email) {
-      const _name = email.split('.');
+    if (username) {
+      const _name = username.split('.');
       setFirstName(_name[0]);
       setLastName(_name[1]);
     }
-  }, [email])
+  }, [username])
 
   return (
       <header className={classes.header}>

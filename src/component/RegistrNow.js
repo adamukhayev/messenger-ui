@@ -8,6 +8,11 @@ const RegistrNow = () => {
 
   const onFinish = async (values) => {
     const user = {
+      username: values.username,
+      phoneNumber: values.phoneNumber,
+      gender: values.gender,
+      image: values.image,
+      birthDate: values.birthDate,
       email: values.email,
       password: values.password
     }
@@ -24,6 +29,11 @@ const RegistrNow = () => {
   };
 
   const values = {
+    username: '',
+    phoneNumber: '',
+    gender: '',
+    image: '',
+    birthDate: '',
     email: '',
     password: '',
   };
@@ -48,6 +58,61 @@ const RegistrNow = () => {
                 }}
                 colon={false}
             >
+              <Form.Item
+                  label="Username"
+                  name="username"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Пожалуйста, заполните обязательное поле!'
+                    },
+                  ]}
+              >
+                <Input value=' '/>
+              </Form.Item>
+              <Form.Item
+                  label="Phone number"
+                  name="phoneNumber"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Пожалуйста, заполните обязательное поле!'
+                    },
+                  ]}
+              >
+                <Input value=' '/>
+              </Form.Item>
+              <Form.Item
+                  label="Gender"
+                  name="gender"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Пожалуйста, заполните обязательное поле!'
+                    },
+                  ]}
+              >
+                <Input value=' '/>
+              </Form.Item>
+              <Form.Item
+                  label="Image"
+                  name="image"
+              >
+                <Input value=' '/>
+              </Form.Item>
+              <Form.Item
+                  label="Birth of date"
+                  name="birthDate"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Пожалуйста, заполните обязательное поле!'
+                    },
+                  ]}
+              >
+                <Input value=' '/>
+              </Form.Item>
+
               <Form.Item
                   label="Email"
                   name="email"
